@@ -19,6 +19,9 @@ Full release notes can be found at https://github.com/FluentValidation/FluentVal
   </PropertyGroup>
   <PropertyGroup>
     <NoWarn>1591</NoWarn>
+    <Authors>Jeremy Skinnerfasd; Rustam Halilov</Authors>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>Konver.$(AssemblyName)</PackageId>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssemblyInfo.cs" Link="CommonAssemblyInfo.cs" />

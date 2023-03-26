@@ -166,6 +166,19 @@ public abstract class AbstractValidator<T> : IValidator<T>, IEnumerable<IValidat
 	public ValidationResult Validate(T instance)
 		=> Validate(new ValidationContext<T>(instance, new PropertyChain(), ValidatorOptions.Global.ValidatorSelectors.DefaultValidatorSelectorFactory()));
 
+	public ValidationResult ValidateWithMessages(T instance) {
+		ValidationResult result = Validate(new ValidationContext<T>(instance, new PropertyChain(), ValidatorOptions.Global.ValidatorSelectors.DefaultValidatorSelectorFactory()));
+
+		var f = result.Errors.First();
+
+		var none = result.Errors.Where(x => x.MessageType == RuleMessageType.None);
+		var errors = result.Errors.Where(x => x.MessageType == RuleMessageType.Error);
+
+		return result;
+	}
+
+	public List<ValidationFailure> GetValidationFailuresByMessageType(ValidationResult result, RuleMessageType messageType) => result.Errors.Where(x => x.MessageType == messageType).ToList();
+
 	/// <summary>
 	/// Validates the specified instance asynchronously
 	/// </summary>

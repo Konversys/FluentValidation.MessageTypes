@@ -32,12 +32,14 @@ public enum CascadeMode {
 	/// <summary>
 	/// For more information, see the methods/properties that accept this enum as a parameter.
 	/// </summary>
+	#pragma warning disable CS0618 // Тип или член устарел
 	[Obsolete(
 		$"The behaviour of {nameof(StopOnFirstFailure)} has been replaced by use of the " +
 		$"separate validator-level properties {nameof(AbstractValidator<object>.ClassLevelCascadeMode)} " +
 		$"and {nameof(AbstractValidator<object>.RuleLevelCascadeMode)}, " +
 		$"and their global default equivalents. {nameof(StopOnFirstFailure)} will be removed in a later release. " +
 		"For more details, see https://docs.fluentvalidation.net/en/latest/cascade.html .")]
+	#pragma warning restore CS0618 // Тип или член устарел
 	StopOnFirstFailure,
 
 	/// <summary>
@@ -77,4 +79,30 @@ public enum Severity {
 	/// Info
 	/// </summary>
 	Info
+}
+
+/// <summary>
+/// Specifies the message box of a rule
+/// </summary>
+public enum RuleMessageType {
+	/// <summary>
+	/// None
+	/// </summary>
+	None,
+	/// <summary>
+	/// Information
+	/// </summary>
+	Information,
+	/// <summary>
+	/// Question
+	/// </summary>
+	Question,
+	/// <summary>
+	/// Warning
+	/// </summary>
+	Warning,
+	/// <summary>
+	/// Error
+	/// </summary>
+	Error,
 }

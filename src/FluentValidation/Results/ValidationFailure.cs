@@ -50,6 +50,13 @@ public class ValidationFailure {
 		AttemptedValue = attemptedValue;
 	}
 
+	public ValidationFailure(string propertyName, string errorMessage, object attemptedValue, RuleMessageType? messageType) {
+		PropertyName = propertyName;
+		ErrorMessage = errorMessage;
+		AttemptedValue = attemptedValue;
+		MessageType = messageType;
+	}
+
 	/// <summary>
 	/// The name of the property.
 	/// </summary>
@@ -84,6 +91,8 @@ public class ValidationFailure {
 	/// Gets or sets the formatted message placeholder values.
 	/// </summary>
 	public Dictionary<string, object> FormattedMessagePlaceholderValues { get; set; }
+
+	public RuleMessageType? MessageType { get; set; }
 
 	/// <summary>
 	/// Creates a textual representation of the failure.

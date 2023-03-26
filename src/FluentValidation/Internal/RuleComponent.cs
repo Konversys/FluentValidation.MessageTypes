@@ -154,6 +154,11 @@ public class RuleComponent<T,TProperty> : IRuleComponent<T,TProperty> {
 	public string ErrorCode { get; set; }
 
 	/// <summary>
+	/// The rule message type
+	/// </summary>
+	public RuleMessageType? MessageType { get; private set; }
+
+	/// <summary>
 	/// Gets the error message. If a context is supplied, it will be used to format the message if it has placeholders.
 	/// If no context is supplied, the raw unformatted message will be returned, containing placeholders.
 	/// </summary>
@@ -208,5 +213,27 @@ public class RuleComponent<T,TProperty> : IRuleComponent<T,TProperty> {
 	public void SetErrorMessage(string errorMessage) {
 		_errorMessage = errorMessage;
 		_errorMessageFactory = null;
+	}
+
+	/// <summary>
+	/// Sets the overridden error message template for this validator.
+	/// </summary>
+	/// <param name="errorMessage">The error message to set</param>
+	/// <param name="messageType">The message type to set</param>
+	public void SetMessageWithType(string errorMessage, RuleMessageType messageType) {
+		_errorMessage = errorMessage;
+		_errorMessageFactory = null;
+		MessageType = messageType;
+	}
+
+	/// <summary>
+	/// Sets the overridden error message template for this validator.
+	/// </summary>
+	/// <param name="errorFactory">A function for retrieving the error message template.</param>
+	/// <param name="messageType">The message type to set</param>
+	public void SetMessageWithType(Func<ValidationContext<T>, TProperty, string> errorFactory, RuleMessageType messageType) {
+		_errorMessageFactory = errorFactory;
+		_errorMessage = null;
+		MessageType = messageType;
 	}
 }

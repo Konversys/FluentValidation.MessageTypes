@@ -67,6 +67,20 @@ public interface IRuleComponent<T, out TProperty> : IRuleComponent {
 	/// </summary>
 	/// <param name="errorMessage">The error message to set</param>
 	void SetErrorMessage(string errorMessage);
+
+	/// <summary>
+	/// Sets the overridden error message template for this validator.
+	/// </summary>
+	/// <param name="errorMessage">The error message to set</param>
+	/// <param name="messageType">The message type to set</param>
+	void SetMessageWithType(string errorMessage, RuleMessageType messageType);
+
+	/// <summary>
+	/// Sets the overridden error message template for this validator.
+	/// </summary>
+	/// <param name="errorFactory">A function for retrieving the error message template.</param>
+	/// /// <param name="messageType">The message type to set</param>
+	void SetMessageWithType(Func<ValidationContext<T>, TProperty, string> errorFactory, RuleMessageType messageType);
 }
 
 /// <summary>
@@ -98,4 +112,6 @@ public interface IRuleComponent {
 	/// The error code associated with this rule component.
 	/// </summary>
 	string ErrorCode { get; }
+
+	RuleMessageType MessageType { get; }
 }

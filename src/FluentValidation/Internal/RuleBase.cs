@@ -312,7 +312,7 @@ internal abstract class RuleBase<T, TProperty, TValue> : IValidationRule<T, TVal
 			? MessageBuilder(new MessageBuilderContext<T, TValue>(context, value, component))
 			: component.GetErrorMessage(context, value);
 
-		var failure = new ValidationFailure(context.PropertyName, error, value);
+		var failure = new ValidationFailure(context.PropertyName, error, value, component.MessageType);
 
 		failure.FormattedMessagePlaceholderValues = new Dictionary<string, object>(context.MessageFormatter.PlaceholderValues);
 		failure.ErrorCode = component.ErrorCode ?? ValidatorOptions.Global.ErrorCodeResolver(component.Validator);

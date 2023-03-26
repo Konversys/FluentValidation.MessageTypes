@@ -156,6 +156,23 @@ public static class DefaultValidatorOptions {
 		return rule;
 	}
 
+	public static IRuleBuilderOptions<T, TProperty> WithInformationMessage<T, TProperty>(this IRuleBuilderOptions<T, TProperty> rule, string errorMessage) => SetMessageWithType(rule, errorMessage, RuleMessageType.Information);
+	public static IRuleBuilderOptions<T, TProperty> WithInformationMessage<T, TProperty>(this IRuleBuilderOptions<T, TProperty> rule, Func<T, string> messageProvider) => SetMessageWithType(rule, messageProvider, RuleMessageType.Information);
+	public static IRuleBuilderOptions<T, TProperty> WithInformationMessage<T, TProperty>(this IRuleBuilderOptions<T, TProperty> rule, Func<T, TProperty, string> messageProvider) => SetMessageWithType(rule, messageProvider, RuleMessageType.Information);
+
+	public static IRuleBuilderOptions<T, TProperty> WithQuestionMessage<T, TProperty>(this IRuleBuilderOptions<T, TProperty> rule, string errorMessage) => SetMessageWithType(rule, errorMessage, RuleMessageType.Question);
+	public static IRuleBuilderOptions<T, TProperty> WithQuestionMessage<T, TProperty>(this IRuleBuilderOptions<T, TProperty> rule, Func<T, string> messageProvider) => SetMessageWithType(rule, messageProvider, RuleMessageType.Question);
+	public static IRuleBuilderOptions<T, TProperty> WithQuestionMessage<T, TProperty>(this IRuleBuilderOptions<T, TProperty> rule, Func<T, TProperty, string> messageProvider) => SetMessageWithType(rule, messageProvider, RuleMessageType.Question);
+
+	public static IRuleBuilderOptions<T, TProperty> WithWarningMessage<T, TProperty>(this IRuleBuilderOptions<T, TProperty> rule, string errorMessage) => SetMessageWithType(rule, errorMessage, RuleMessageType.Warning);
+	public static IRuleBuilderOptions<T, TProperty> WithWarningMessage<T, TProperty>(this IRuleBuilderOptions<T, TProperty> rule, Func<T, string> messageProvider) => SetMessageWithType(rule, messageProvider, RuleMessageType.Warning);
+	public static IRuleBuilderOptions<T, TProperty> WithWarningMessage<T, TProperty>(this IRuleBuilderOptions<T, TProperty> rule, Func<T, TProperty, string> messageProvider) => SetMessageWithType(rule, messageProvider, RuleMessageType.Warning);
+
+	public static IRuleBuilderOptions<T, TProperty> WithErrorMessage<T, TProperty>(this IRuleBuilderOptions<T, TProperty> rule, string errorMessage) => SetMessageWithType(rule, errorMessage, RuleMessageType.Error);
+	public static IRuleBuilderOptions<T, TProperty> WithErrorMessage<T, TProperty>(this IRuleBuilderOptions<T, TProperty> rule, Func<T, string> messageProvider) => SetMessageWithType(rule, messageProvider, RuleMessageType.Error);
+	public static IRuleBuilderOptions<T, TProperty> WithErrorMessage<T, TProperty>(this IRuleBuilderOptions<T, TProperty> rule, Func<T, TProperty, string> messageProvider) => SetMessageWithType(rule, messageProvider, RuleMessageType.Error);
+
+
 	/// <summary>
 	/// Specifies a custom error code to use if validation fails.
 	/// </summary>
@@ -569,6 +586,28 @@ public static class DefaultValidatorOptions {
 		// This overload supports RuleFor().SetCollectionValidator() (which returns IRuleBuilderOptions<T, IEnumerable<TElement>>)
 		callback.Guard("Cannot pass null to OverrideIndexer.", nameof(callback));
 		Configurable(rule).IndexBuilder = callback;
+		return rule;
+	}
+
+	private static IRuleBuilderOptions<T, TProperty> SetMessageWithType<T, TProperty>(this IRuleBuilderOptions<T, TProperty> rule, string errorMessage, RuleMessageType messageType) {
+		errorMessage.Guard("A message must be specified when calling MessageWithType.", nameof(errorMessage));
+		Configurable(rule).Current.SetMessageWithType(errorMessage, messageType);
+		return rule;
+	}
+
+	private static IRuleBuilderOptions<T, TProperty> SetMessageWithType<T, TProperty>(this IRuleBuilderOptions<T, TProperty> rule, Func<T, string> messageProvider, RuleMessageType messageType) {
+		messageProvider.Guard("A messageProvider must be provided.", nameof(messageProvider));
+		Configurable(rule).Current.SetMessageWithType((ctx, val) => {
+			return messageProvider(ctx == null ? default : ctx.InstanceToValidate);
+		}, messageType);
+		return rule;
+	}
+
+	private static IRuleBuilderOptions<T, TProperty> SetMessageWithType<T, TProperty>(this IRuleBuilderOptions<T, TProperty> rule, Func<T, TProperty, string> messageProvider, RuleMessageType messageType) {
+		messageProvider.Guard("A messageProvider must be provided.", nameof(messageProvider));
+		Configurable(rule).Current.SetMessageWithType((context, value) => {
+			return messageProvider(context == null ? default : context.InstanceToValidate, value);
+		}, messageType);
 		return rule;
 	}
 }
